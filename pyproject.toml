@@ -15,6 +15,7 @@ dependencies = [
 	"plotly>=5.15",
 	"streamlit>=1.20",
 	"folium>=0.16",
+	"pyarrow>=22.0.0",
 ]
 
 [project.optional-dependencies]

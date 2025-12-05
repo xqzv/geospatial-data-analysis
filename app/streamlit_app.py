@@ -52,14 +52,29 @@ def load_and_process_data():
     # Load data (using samples for demo speed if full data is large, but here we try full)
     # In a real app, we might want to load pre-processed parquet files
     data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
-    nypd_path = os.path.join(data_dir, 'nypd_aligned.csv')
-    lapd_path = os.path.join(data_dir, 'lapd_aligned.csv')
     
-    # Fallback to samples if full data not found
-    if not os.path.exists(nypd_path):
-        nypd_path = os.path.join(data_dir, 'sample_nypd.csv')
-    if not os.path.exists(lapd_path):
-        lapd_path = os.path.join(data_dir, 'sample_lapd.csv')
+    # Try loading parquet files first (faster and smaller)
+    nypd_parquet = os.path.join(data_dir, 'nypd_aligned.parquet')
+    lapd_parquet = os.path.join(data_dir, 'lapd_aligned.parquet')
+    
+    nypd_csv = os.path.join(data_dir, 'nypd_aligned.csv')
+    lapd_csv = os.path.join(data_dir, 'lapd_aligned.csv')
+    
+    if os.path.exists(nypd_parquet):
+        nypd_path = nypd_parquet
+    elif os.path.exists(nypd_csv):
+        nypd_path = nypd_csv
+    else:
+        st.error("NYPD data not found. Please ensure 'nypd_aligned.parquet' or 'nypd_aligned.csv' exists in the data directory.")
+        return None, None
+
+    if os.path.exists(lapd_parquet):
+        lapd_path = lapd_parquet
+    elif os.path.exists(lapd_csv):
+        lapd_path = lapd_csv
+    else:
+        st.error("LAPD data not found. Please ensure 'lapd_aligned.parquet' or 'lapd_aligned.csv' exists in the data directory.")
+        return None, None
 
     nypd_df = load_data(nypd_path)
     lapd_df = load_data(lapd_path)
