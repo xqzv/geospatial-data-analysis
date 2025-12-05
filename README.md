@@ -31,10 +31,8 @@ density-crime-analysis/
 ├── app/
 │   └── streamlit_app.py       # Interactive Streamlit dashboard
 ├── data/
-│   ├── lapd_aligned.csv       # Processed LAPD data
-│   ├── nypd_aligned.csv       # Processed NYPD data
-│   ├── sample_lapd.csv        # Sample LAPD data for testing
-│   └── sample_nypd.csv        # Sample NYPD data for testing
+│   ├── lapd_aligned.parquet   # Processed LAPD data (Parquet)
+│   ├── nypd_aligned.parquet   # Processed NYPD data (Parquet)
 ├── docs/
 │   └── Project-Plan.md        # Development roadmap and documentation
 ├── notebooks/
