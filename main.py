@@ -1,5 +1,5 @@
 def main():
-    print("Hello from density-crime-analysis!")
+    print("Hello from geospatial-data-analysis!")
 
 
 if __name__ == "__main__":

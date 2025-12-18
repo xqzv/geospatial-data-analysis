@@ -1,10 +1,10 @@
 import streamlit as st
 import sys
 import os
-
+import matplotlib.pyplot as plt
 
 # Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.io import load_data
 from src.standardize import rename_nypd_columns, rename_lapd_columns, clean_nypd_data, clean_lapd_data
@@ -22,16 +22,12 @@ from src.visualization import (
     plot_crime_by_weekday,
     plot_crime_by_day_of_month,
     create_crime_density_comparison,
-    plot_race_distribution,
-    plot_gender_distribution,
-    plot_age_distribution,
-    plot_offense_distribution
+    create_demographic_dashboard
 )
 
+st.set_page_config(page_title="Geospatial Data Analysis", layout="wide")
 
-st.set_page_config(page_title="Density Crime Analysis", layout="wide")
-
-st.title("Density Crime Analysis: NYPD vs LAPD")
+st.title("Geospatial Data Analysis: NYPD vs LAPD")
 st.markdown("Comparative analysis of arrest patterns in New York and Los Angeles.")
 
 with st.expander("About this Project"):
@@ -56,29 +52,14 @@ def load_and_process_data():
     # Load data (using samples for demo speed if full data is large, but here we try full)
     # In a real app, we might want to load pre-processed parquet files
     data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+    nypd_path = os.path.join(data_dir, 'nypd_aligned.csv')
+    lapd_path = os.path.join(data_dir, 'lapd_aligned.csv')
     
-    # Try loading parquet files first (faster and smaller)
-    nypd_parquet = os.path.join(data_dir, 'nypd_aligned.parquet')
-    lapd_parquet = os.path.join(data_dir, 'lapd_aligned.parquet')
-    
-    nypd_csv = os.path.join(data_dir, 'nypd_aligned.csv')
-    lapd_csv = os.path.join(data_dir, 'lapd_aligned.csv')
-    
-    if os.path.exists(nypd_parquet):
-        nypd_path = nypd_parquet
-    elif os.path.exists(nypd_csv):
-        nypd_path = nypd_csv
-    else:
-        st.error("NYPD data not found. Please ensure 'nypd_aligned.parquet' or 'nypd_aligned.csv' exists in the data directory.")
-        return None, None
-
-    if os.path.exists(lapd_parquet):
-        lapd_path = lapd_parquet
-    elif os.path.exists(lapd_csv):
-        lapd_path = lapd_csv
-    else:
-        st.error("LAPD data not found. Please ensure 'lapd_aligned.parquet' or 'lapd_aligned.csv' exists in the data directory.")
-        return None, None
+    # Fallback to samples if full data not found
+    if not os.path.exists(nypd_path):
+        nypd_path = os.path.join(data_dir, 'sample_nypd.csv')
+    if not os.path.exists(lapd_path):
+        lapd_path = os.path.join(data_dir, 'sample_lapd.csv')
 
     nypd_df = load_data(nypd_path)
     lapd_df = load_data(lapd_path)
@@ -144,25 +125,29 @@ else:
         
         with col1:
             st.markdown("#### Yearly Trend")
-            fig_year = plot_crime_by_year(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_year, use_container_width=True)
+            fig_year, ax_year = plt.subplots(figsize=(10, 6))
+            plot_crime_by_year(nypd_filtered, lapd_filtered, ax_year, '#1f77b4', '#ff7f0e')
+            st.pyplot(fig_year)
             
         with col2:
             st.markdown("#### Monthly Seasonality")
-            fig_month = plot_crime_by_month(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_month, use_container_width=True)
+            fig_month, ax_month = plt.subplots(figsize=(10, 6))
+            plot_crime_by_month(nypd_filtered, lapd_filtered, ax_month, '#1f77b4', '#ff7f0e')
+            st.pyplot(fig_month)
 
         col3, col4 = st.columns(2)
 
         with col3:
             st.markdown("#### Day of Week")
-            fig_week = plot_crime_by_weekday(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_week, use_container_width=True)
+            fig_week, ax_week = plt.subplots(figsize=(10, 6))
+            plot_crime_by_weekday(nypd_filtered, lapd_filtered, ax_week, '#1f77b4', '#ff7f0e')
+            st.pyplot(fig_week)
 
         with col4:
             st.markdown("#### Day of Month")
-            fig_dom = plot_crime_by_day_of_month(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_dom, use_container_width=True)
+            fig_dom, ax_dom = plt.subplots(figsize=(10, 6))
+            plot_crime_by_day_of_month(nypd_filtered, lapd_filtered, ax_dom, '#1f77b4', '#ff7f0e')
+            st.pyplot(fig_dom)
 
     with tab2:
         st.subheader("Geospatial Analysis")
@@ -179,29 +164,9 @@ else:
         st.subheader("Demographic Analysis")
         st.markdown("Comparison of arrest demographics (Race, Gender, Age, Offense).")
         
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("#### Race Distribution")
-            fig_race = plot_race_distribution(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_race, use_container_width=True)
-            
-        with col2:
-            st.markdown("#### Gender Distribution")
-            fig_gender = plot_gender_distribution(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_gender, use_container_width=True)
-
-        col3, col4 = st.columns(2)
-
-        with col3:
-            st.markdown("#### Age Distribution")
-            fig_age = plot_age_distribution(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_age, use_container_width=True)
-
-        with col4:
-            st.markdown("#### Offense Type Distribution")
-            fig_offense = plot_offense_distribution(nypd_filtered, lapd_filtered)
-            st.plotly_chart(fig_offense, use_container_width=True)
+        with st.spinner("Generating demographic dashboard..."):
+            fig_demo = create_demographic_dashboard(nypd_filtered, lapd_filtered)
+            st.pyplot(fig_demo)
 
     with tab4:
         st.subheader("Data Preview")

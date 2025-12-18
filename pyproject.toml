@@ -1,5 +1,5 @@
 [project]
-name = "density-crime-analysis"
+name = "geospatial-data-analysis"
 version = "0.1.0"
 description = "Comparative analysis of NYPD and LAPD arrest patterns (2010-2019)"
 readme = "README.md"
@@ -15,7 +15,6 @@ dependencies = [
 	"plotly>=5.15",
 	"streamlit>=1.20",
 	"folium>=0.16",
-	"pyarrow>=22.0.0",
 ]
 
 [project.optional-dependencies]

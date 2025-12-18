@@ -1,9 +1,9 @@
-# Density Crime Analysis
+# Geospatial Data Analysis
 
 ![Python Version](https://img.shields.io/badge/python-3.13%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-active-success)
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://density-crime-analysis-project.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://geospatial-data-analysis.streamlit.app/)
 
 Comparative analysis of NYPD and LAPD arrest patterns (2010–2019), exploring relationships between population density and crime arrest rates across New York City and Los Angeles.
 
@@ -11,7 +11,7 @@ Comparative analysis of NYPD and LAPD arrest patterns (2010–2019), exploring r
 
 Urban density and policing strategies are inextricably linked, yet comparing distinct metropolitan models like New York and Los Angeles is difficult due to fragmented data standards.
 
-**Density Crime Analysis** unifies over a decade of arrest records from NYPD and LAPD into a standardized, interactive intelligence platform. It enables policy makers, journalists, and researchers to:
+**Geospatial Data Analysis** unifies over a decade of arrest records from NYPD and LAPD into a standardized, interactive intelligence platform. It enables policy makers, journalists, and researchers to:
 
 *   **Audit Enforcement**: Compare arrest rates normalized by population density across disparate urban environments.
 *   **Identify Bias**: Visualize demographic disparities and enforcement patterns across different geographies.
@@ -27,12 +27,14 @@ Urban density and policing strategies are inextricably linked, yet comparing dis
 ## 📂 Repository Structure
 
 ```text
-density-crime-analysis/
+geospatial-data-analysis/
 ├── app/
 │   └── streamlit_app.py       # Interactive Streamlit dashboard
 ├── data/
-│   ├── lapd_aligned.parquet   # Processed LAPD data (Parquet)
-│   ├── nypd_aligned.parquet   # Processed NYPD data (Parquet)
+│   ├── lapd_aligned.csv       # Processed LAPD data
+│   ├── nypd_aligned.csv       # Processed NYPD data
+│   ├── sample_lapd.csv        # Sample LAPD data for testing
+│   └── sample_nypd.csv        # Sample NYPD data for testing
 ├── docs/
 │   └── Project-Plan.md        # Development roadmap and documentation
 ├── notebooks/
@@ -63,7 +65,7 @@ density-crime-analysis/
 1.  **Clone the repository:**
     ```bash
     git clone <repository-url>
-    cd density-crime-analysis
+    cd geospatial-data-analysis
     ```
 
 2.  **Install dependencies:**
@@ -86,7 +88,7 @@ density-crime-analysis/
 ## 📊 Usage
 
 ### Interactive Dashboard
-Access the live application here: [**Density Crime Analysis Dashboard**](https://density-crime-analysis-project.streamlit.app/)
+Access the live application here: [**Geospatial Data Analysis Dashboard**](https://geospatial-data-analysis.streamlit.app/)
 
 Or launch it locally to explore the data:
 ```bash

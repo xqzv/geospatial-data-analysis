@@ -3,26 +3,23 @@ import os
 
 def load_data(filepath: str) -> pd.DataFrame | None:
     """
-    Load data from CSV or Parquet files with robust error handling.
+    Load data from CSV files with robust error handling.
     
     Args:
-        filepath (str): Path to the file.
+        filepath (str): Path to the CSV file.
         
     Returns:
         pd.DataFrame | None: Loaded DataFrame or None if loading failed.
     """
     try:
-        if filepath.endswith('.parquet'):
-            df = pd.read_parquet(filepath)
-        else:
-            df = pd.read_csv(filepath, low_memory=False)
+        df = pd.read_csv(filepath, low_memory=False)
         print(f"Data successfully loaded from {filepath}")
         return df
     except FileNotFoundError:
         print(f"Error: File not found at {filepath}")
         return None
     except pd.errors.ParserError:
-        print(f"Error: Unable to parse file at {filepath}. Check file format.")
+        print(f"Error: Unable to parse CSV file at {filepath}. Check file format.")
         return None
     except Exception as e:
         print(f"An unexpected error occurred while loading {filepath}: {e}")
